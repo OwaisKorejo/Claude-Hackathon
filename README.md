@@ -16,6 +16,22 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npx expo start
    ```
 
+## Connect Supabase
+
+1. Create a local env file:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Fill in your Supabase project values in `.env`:
+   - `EXPO_PUBLIC_SUPABASE_URL`
+   - `EXPO_PUBLIC_SUPABASE_ANON_KEY`
+
+3. Restart Expo (`npx expo start -c`) so env vars reload.
+
+4. Open the app and go to **Hub → Meals (Supabase)** to query the `meals` table.
+
 In the output, you'll find options to open the app in a
 
 - [development build](https://docs.expo.dev/develop/development-builds/introduction/)

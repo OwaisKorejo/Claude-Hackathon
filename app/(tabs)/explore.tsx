@@ -1,112 +1,186 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useRouter } from 'expo-router';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+const C = {
+  bg:      '#080D1A',
+  card:    '#111827',
+  border:  'rgba(255,255,255,0.07)',
+  white:   '#FFFFFF',
+  muted:   'rgba(255,255,255,0.5)',
+  faint:   'rgba(255,255,255,0.2)',
+  heart:   '#FF4B6E',
+  hrv:     '#A78BFA',
+  o2:      '#22D3EE',
+  resp:    '#34D399',
+  rhr:     '#FBBF24',
+  indigo:  '#6366F1',
+};
 
-export default function TabTwoScreen() {
+const FEATURES = [
+  {
+    route: '/health-logs' as const,
+    emoji: '📊',
+    title: 'Health Logs',
+    description: 'HRV, sleep phases, steps, resting heart rate — full trend analysis.',
+    color: C.o2,
+    dim: 'rgba(34,211,238,0.12)',
+    tags: ['HRV', 'Sleep', 'Steps', 'O₂ Sat'],
+  },
+  {
+    route: '/journal' as const,
+    emoji: '📓',
+    title: 'Daily Journal',
+    description: 'Mood, energy, meals, and daily notes — track your whole self.',
+    color: C.rhr,
+    dim: 'rgba(251,191,36,0.12)',
+    tags: ['Mood', 'Energy', 'Meals', 'Notes'],
+  },
+  {
+    route: '/ai-insights' as const,
+    emoji: '✦',
+    title: 'AI Insights',
+    description: 'Daily briefings powered by Claude, tailored to your physiology.',
+    color: C.hrv,
+    dim: 'rgba(167,139,250,0.12)',
+    tags: ['Trends', 'Recommendations', 'Patterns'],
+  },
+  {
+    route: '/meals' as const,
+    emoji: '🍽️',
+    title: 'Meals (Supabase)',
+    description: 'Live query to your Supabase `meals` table with pull-to-refresh.',
+    color: C.indigo,
+    dim: 'rgba(99,102,241,0.12)',
+    tags: ['Supabase', 'Meals', 'Live Data'],
+  },
+  {
+    route: '/exercises' as const,
+    emoji: '🏋️',
+    title: 'Exercises',
+    description: 'Log every set, rep, and run. Tracks to Supabase with volume and RPE.',
+    color: '#F97316',
+    dim: 'rgba(249,115,22,0.12)',
+    tags: ['Push', 'Pull', 'Legs', 'Cardio', 'RPE'],
+  },
+  {
+    route: '/body-scan' as const,
+    emoji: '🔬',
+    title: 'Body Scan',
+    description: 'Camera-guided body composition scan using the U.S. Navy formula to estimate body fat %.',
+    color: '#F472B6',
+    dim: 'rgba(244,114,182,0.12)',
+    tags: ['Body Fat %', 'Camera', 'Navy Formula'],
+  },
+  {
+    route: '/profile' as const,
+    emoji: '🎯',
+    title: 'Profile & Goals',
+    description: 'Health goals, injuries, chronic conditions, and target metrics.',
+    color: C.resp,
+    dim: 'rgba(52,211,153,0.12)',
+    tags: ['Goals', 'Conditions', 'Targets'],
+  },
+];
+
+export default function ExploreScreen() {
+  const router = useRouter();
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <SafeAreaView style={s.safe} edges={['top']}>
+      <StatusBar barStyle="light-content" backgroundColor={C.bg} />
+      <ScrollView style={s.scroll} contentContainerStyle={s.content} showsVerticalScrollIndicator={false}>
+
+        {/* Header */}
+        <View style={s.header}>
+          <Text style={s.headerTitle}>Your Health Hub</Text>
+          <Text style={s.headerSub}>Tap any section to explore</Text>
+        </View>
+
+        {/* Add Data CTA */}
+        <TouchableOpacity style={s.addCta} activeOpacity={0.8} onPress={() => router.push('/add-data')}>
+          <Text style={s.addCtaIcon}>＋</Text>
+          <View style={{ flex: 1 }}>
+            <Text style={s.addCtaTitle}>Add Today&apos;s Data</Text>
+            <Text style={s.addCtaSub}>Log health metrics manually</Text>
+          </View>
+          <Text style={s.addCtaArrow}>›</Text>
+        </TouchableOpacity>
+
+        {/* Feature cards */}
+        {FEATURES.map(f => (
+          <TouchableOpacity
+            key={f.route}
+            style={[s.card, { borderColor: f.color + '30' }]}
+            activeOpacity={0.75}
+            onPress={() => router.push(f.route)}
+          >
+            <View style={s.cardTop}>
+              <View style={[s.iconBg, { backgroundColor: f.dim }]}>
+                <Text style={s.iconEmoji}>{f.emoji}</Text>
+              </View>
+              <Text style={[s.cardArrow, { color: f.color }]}>›</Text>
+            </View>
+            <Text style={[s.cardTitle, { color: f.color }]}>{f.title}</Text>
+            <Text style={s.cardDesc}>{f.description}</Text>
+            <View style={s.tagRow}>
+              {f.tags.map(t => (
+                <View key={t} style={[s.tag, { backgroundColor: f.color + '18' }]}>
+                  <Text style={[s.tagText, { color: f.color }]}>{t}</Text>
+                </View>
+              ))}
+            </View>
+          </TouchableOpacity>
+        ))}
+
+        <Text style={s.footer}>Data source: Garmin Connect · Europe/Dublin</Text>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
-  },
-  titleContainer: {
+const s = StyleSheet.create({
+  safe:       { flex: 1, backgroundColor: C.bg },
+  scroll:     { flex: 1, backgroundColor: C.bg },
+  content:    { paddingHorizontal: 16, paddingBottom: 40 },
+
+  header: { paddingTop: 20, paddingBottom: 20 },
+  headerTitle: { fontSize: 28, fontWeight: '800', color: C.white, letterSpacing: -0.5 },
+  headerSub:   { fontSize: 14, color: C.muted, marginTop: 3 },
+
+  addCta: {
     flexDirection: 'row',
-    gap: 8,
+    alignItems: 'center',
+    backgroundColor: C.indigo + '22',
+    borderWidth: 1,
+    borderColor: C.indigo + '55',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    gap: 12,
   },
+  addCtaIcon:  { fontSize: 24, color: C.indigo },
+  addCtaTitle: { fontSize: 16, fontWeight: '700', color: C.white },
+  addCtaSub:   { fontSize: 13, color: C.muted, marginTop: 2 },
+  addCtaArrow: { fontSize: 26, color: C.indigo, marginRight: 4 },
+
+  card: {
+    backgroundColor: C.card,
+    borderRadius: 20,
+    borderWidth: 1,
+    padding: 20,
+    marginBottom: 14,
+  },
+  cardTop:   { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 12 },
+  iconBg:    { width: 48, height: 48, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
+  iconEmoji: { fontSize: 24 },
+  cardArrow: { fontSize: 32, lineHeight: 48 },
+  cardTitle: { fontSize: 20, fontWeight: '800', marginBottom: 6, letterSpacing: -0.3 },
+  cardDesc:  { fontSize: 14, color: C.muted, lineHeight: 20, marginBottom: 14 },
+  tagRow:    { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
+  tag:       { borderRadius: 20, paddingHorizontal: 10, paddingVertical: 4 },
+  tagText:   { fontSize: 11, fontWeight: '700', letterSpacing: 0.3 },
+
+  footer: { textAlign: 'center', fontSize: 11, color: C.faint, marginTop: 8 },
 });
